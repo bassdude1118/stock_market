@@ -1,0 +1,55 @@
+
+{{ block content }}
+
+<!--displays to the participant the price current price-->
+
+<p id="msg-current-price"></p>
+
+<!--creates a button where the participant can buy or sell the asset. On click the function buyAsset-->
+<!--or the function sellAsset is executed-->
+<button type="button" id="btn-buy" onclick="buyAsset(this)"></button>
+<button type="button" id="btn-sell" onclick="sellAsset(this)" ></button>
+
+
+<br><br>
+
+
+<!--Start Javascript code, define that the buttons are elements which can be changed, and define
+the current price to be displayed as a message which can also change-->
+<script>
+    let buyBtn= document.getElementById('btn-buy');
+    let sellBtn = document.getElementById('btn-sell');
+    let msgCurrentPrice= document.getElementById('msg-current-price');
+
+
+
+    //defines the buy button function
+    function buyAsset(btn) {
+        liveSend(parseInt(btn.value));
+    }
+    //defines the sell button function
+    function sellAsset(btn) {
+        liveSend(parseInt(btn.value));
+        }
+
+    //defines the live receive function, where the current price is changed to the new price upon
+    //clicking of either button
+    function liveRecv(data) {
+        msgCurrentPrice.innerText = `The current price is ${data.current_price}`;
+        let nextBuy = data.current_price + 10;
+        buyBtn.value = nextBuy;
+        buyBtn.innerText = `Buy at ${nextBuy} dollars`;
+
+        let nextSell = data.current_price - 10;
+        sellBtn.value = nextSell;
+        sellBtn.innerText = `Sell at ${nextSell} dollars`;
+
+
+        }
+    //loads the liveSend function when the page is full loaded
+    document.addEventListener("DOMContentLoaded", function (event) {
+        liveSend({});
+    });
+</script>
+
+{{ endblock }}
